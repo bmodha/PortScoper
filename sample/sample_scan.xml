@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE nmaprun>
+<nmaprun scanner="nmap">
+<host>
+<status state="up"/>
+<address addr="192.168.1.100" addrtype="ipv4"/>
+<hostnames>
+<hostname name="test-server" type="PTR"/>
+</hostnames>
+<ports>
+<port protocol="tcp" portid="22">
+<state state="open"/>
+<service name="ssh" product="OpenSSH" version="8.2p1"/>
+</port>
+<port protocol="tcp" portid="80">
+<state state="open"/>
+<service name="http" product="Apache httpd" version="2.4.41"/>
+<script id="http-title" output="Test Web Server"/>
+</port>
+<port protocol="tcp" portid="443">
+<state state="open"/>
+<service name="https" product="Apache httpd" version="2.4.41"/>
+<script id="ssl-cert" output="Subject: commonName=test-server"/>
+</port>
+<port protocol="tcp" portid="3306">
+<state state="open"/>
+<service name="mysql" product="MySQL" version="8.0.32"/>
+</port>
+</ports>
+<os>
+<osmatch name="Linux 5.4" accuracy="95"/>
+</os>
+</host>
+
+<host>
+<status state="up"/>
+<address addr="192.168.1.101" addrtype="ipv4"/>
+<ports>
+<port protocol="tcp" portid="445">
+<state state="open"/>
+<service name="microsoft-ds" product="Samba smbd" version="4.11.6"/>
+</port>
+<port protocol="tcp" portid="80">
+<state state="open"/>
+<service name="http" product="nginx" version="1.18.0"/>
+<script id="http-title" output="Welcome Page"/>
+</port>
+</ports>
+</host>
+</nmaprun>
