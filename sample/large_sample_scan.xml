@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE nmaprun>
+<nmaprun scanner="nmap">
+<host>
+<status state="up"/>
+<address addr="10.0.0.100" addrtype="ipv4"/>
+<hostnames>
+<hostname name="web-server-1" type="PTR"/>
+</hostnames>
+<ports>
+<!-- Web Services Cluster -->
+<port protocol="tcp" portid="80">
+<state state="open"/>
+<service name="http" product="nginx" version="1.20.1"/>
+<script id="http-title" output="Company Intranet"/>
+</port>
+<port protocol="tcp" portid="443">
+<state state="open"/>
+<service name="https" product="nginx" version="1.20.1"/>
+<script id="ssl-cert" output="Subject: commonName=*.company.local"/>
+</port>
+<port protocol="tcp" portid="8080">
+<state state="open"/>
+<service name="http-proxy" product="Squid http proxy" version="4.10"/>
+</port>
+<port protocol="tcp" portid="8443">
+<state state="open"/>
+<service name="https-alt" product="Apache Tomcat" version="9.0.54"/>
+</port>
+<!-- Database Services -->
+<port protocol="tcp" portid="3306">
+<state state="open"/>
+<service name="mysql" product="MySQL" version="8.0.27"/>
+<script id="mysql-info" output="Protocol: 10  Version: 8.0.27"/>
+</port>
+<port protocol="tcp" portid="5432">
+<state state="open"/>
+<service name="postgresql" product="PostgreSQL DB" version="13.4"/>
+</port>
+<!-- Additional Services -->
+<port protocol="tcp" portid="6379">
+<state state="open"/>
+<service name="redis" product="Redis key-value store" version="6.2.6"/>
+</port>
+<port protocol="tcp" portid="11211">
+<state state="open"/>
+<service name="memcached" product="Memcached" version="1.6.12"/>
+</port>
+</ports>
+<os>
+<osmatch name="Ubuntu Linux 20.04" accuracy="96"/>
+</os>
+</host>
+
+<host>
+<status state="up"/>
+<address addr="10.0.0.101" addrtype="ipv4"/>
+<hostnames>
+<hostname name="app-server-1" type="PTR"/>
+</hostnames>
+<ports>
+<!-- Application Services -->
+<port protocol="tcp" portid="8000">
+<state state="open"/>
+<service name="http" product="Gunicorn" version="20.1.0"/>
+</port>
+<port protocol="tcp" portid="8001">
+<state state="open"/>
+<service name="http" product="Django" version="3.2.8"/>
+</port>
+<port protocol="tcp" portid="9000">
+<state state="open"/>
+<service name="cslistener" product="PHP-FPM" version="8.0.12"/>
+</port>
+<!-- Monitoring Services -->
+<port protocol="tcp" portid="9090">
+<state state="open"/>
+<service name="prometheus" product="Prometheus" version="2.30.3"/>
+</port>
+<port protocol="tcp" portid="9100">
+<state state="open"/>
+<service name="node-exporter" product="Prometheus Node Exporter" version="1.2.2"/>
+</port>
+<port protocol="tcp" portid="3000">
+<state state="open"/>
+<service name="grafana" product="Grafana" version="8.2.3"/>
+</port>
+</ports>
+<os>
+<osmatch name="Ubuntu Linux 20.04" accuracy="95"/>
+</os>
+</host>
+
+<host>
+<status state="up"/>
+<address addr="10.0.0.102" addrtype="ipv4"/>
+<hostnames>
+<hostname name="infra-server-1" type="PTR"/>
+</hostnames>
+<ports>
+<!-- Infrastructure Services -->
+<port protocol="tcp" portid="22">
+<state state="open"/>
+<service name="ssh" product="OpenSSH" version="8.4p1"/>
+<script id="ssh-hostkey" output="2048 aa:bb:cc:dd:ee:ff (RSA)"/>
+</port>
+<port protocol="tcp" portid="53">
+<state state="open"/>
+<service name="domain" product="ISC BIND" version="9.16.1"/>
+</port>
+<port protocol="tcp" portid="88">
+<state state="open"/>
+<service name="kerberos-sec" product="Heimdal Kerberos" version="7.7.0"/>
+</port>
+<port protocol="tcp" portid="389">
+<state state="open"/>
+<service name="ldap" product="OpenLDAP" version="2.4.57"/>
+</port>
+<port protocol="tcp" portid="636">
+<state state="open"/>
+<service name="ldapssl" product="OpenLDAP" version="2.4.57"/>
+</port>
+<port protocol="tcp" portid="445">
+<state state="open"/>
+<service name="microsoft-ds" product="Samba" version="4.13.17"/>
+</port>
+</ports>
+<os>
+<osmatch name="Ubuntu Linux 20.04" accuracy="94"/>
+</os>
+</host>
+
+<host>
+<status state="up"/>
+<address addr="10.0.0.103" addrtype="ipv4"/>
+<hostnames>
+<hostname name="misc-server-1" type="PTR"/>
+</hostnames>
+<ports>
+<!-- Random High Ports with Various Services -->
+<port protocol="tcp" portid="10001">
+<state state="open"/>
+<service name="http" product="Generic Service" version="1.2.3"/>
+<script id="service-info" output="Generic service information 1"/>
+</port>
+<port protocol="tcp" portid="10002">
+<state state="open"/>
+<service name="ftp" product="Generic Service" version="2.3.4"/>
+</port>
+<port protocol="tcp" portid="10003">
+<state state="open"/>
+<service name="ssh" product="Generic Service" version="3.4.5"/>
+<script id="service-info" output="Generic service information 3"/>
+</port>
+<port protocol="tcp" portid="10004">
+<state state="open"/>
+<service name="telnet" product="Generic Service" version="4.5.6"/>
+</port>
+<port protocol="tcp" portid="10005">
+<state state="open"/>
+<service name="smtp" product="Generic Service" version="5.6.7"/>
+<script id="service-info" output="Generic service information 5"/>
+</port>
+<port protocol="tcp" portid="10006">
+<state state="open"/>
+<service name="pop3" product="Generic Service" version="6.7.8"/>
+</port>
+<!-- Repeat pattern for remaining ports -->
+<port protocol="tcp" portid="20001">
+<state state="open"/>
+<service name="http" product="Generic Service" version="7.8.9"/>
+<script id="service-info" output="Generic service information 7"/>
+</port>
+<port protocol="tcp" portid="20002">
+<state state="open"/>
+<service name="ftp" product="Generic Service" version="8.9.0"/>
+</port>
+<port protocol="tcp" portid="20003">
+<state state="open"/>
+<service name="ssh" product="Generic Service" version="9.0.1"/>
+<script id="service-info" output="Generic service information 9"/>
+</port>
+<!-- Add more ports in blocks of 10000 -->
+<port protocol="tcp" portid="30001">
+<state state="open"/>
+<service name="telnet" product="Generic Service" version="1.0.2"/>
+</port>
+<port protocol="tcp" portid="30002">
+<state state="open"/>
+<service name="smtp" product="Generic Service" version="2.1.3"/>
+<script id="service-info" output="Generic service information 11"/>
+</port>
+<port protocol="tcp" portid="30003">
+<state state="open"/>
+<service name="pop3" product="Generic Service" version="3.2.4"/>
+</port>
+<!-- Continue pattern up to 80 ports total -->
+<port protocol="tcp" portid="40001">
+<state state="open"/>
+<service name="http" product="Generic Service" version="4.3.5"/>
+<script id="service-info" output="Generic service information 13"/>
+</port>
+<port protocol="tcp" portid="40002">
+<state state="open"/>
+<service name="ftp" product="Generic Service" version="5.4.6"/>
+</port>
+<port protocol="tcp" portid="40003">
+<state state="open"/>
+<service name="ssh" product="Generic Service" version="6.5.7"/>
+<script id="service-info" output="Generic service information 15"/>
+</port>
+<!-- Add remaining ports following the same pattern -->
+</ports>
+<os>
+<osmatch name="Ubuntu Linux 20.04" accuracy="93"/>
+</os>
+</host>
+
+</nmaprun>
