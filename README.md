@@ -1,6 +1,6 @@
 # PortScoper
 
-A comprehensive Nmap output analyzer and enumeration helper that parses XML output and generates detailed reports with enumeration commands. This is a work in progress, and the main part that needs more work is the list of enumeration commands per service in the common services section. 
+A comprehensive Nmap output analyzer and enumeration helper that parses XML output and generates detailed reports with enumeration commands.
 
 ## Features
 
@@ -39,10 +39,28 @@ You can analyze multiple Nmap XML files with different merge strategies:
 # Analyze multiple scans (union strategy by default)
 python portscoper.py -i scan1.xml scan2.xml scan3.xml
 
-# Use different merge strategies
+# Choose a specific merge strategy
 python portscoper.py -i scan1.xml scan2.xml --merge-strategy intersection
-python portscoper.py -i scan1.xml scan2.xml --merge-strategy latest
 ```
+
+#### Merge Strategies
+
+Choose how to combine multiple scan results:
+
+- **union** (default): Combines all findings
+  - Includes all hosts and ports from all scans
+  - Updates port states if they change
+  - Best for: Complete enumeration, catching intermittent services
+
+- **intersection**: Keeps only common findings
+  - Only includes hosts/ports present in all scans
+  - Filters out transient services
+  - Best for: Finding stable, persistent services
+
+- **latest**: Uses most recent data
+  - Takes newest scan data for each host
+  - Overwrites old data completely
+  - Best for: Current state analysis
 
 ### Report Organization
 
@@ -76,25 +94,6 @@ Specify custom output file paths:
 ```bash
 python portscoper.py -i scan.xml -o custom_report.xlsx -c custom_commands.json
 ```
-
-## Merge Strategies
-
-When analyzing multiple scan files, choose from three merge strategies:
-
-1. `union` (default): Combines all findings from all scans
-   - Includes all hosts from all scans
-   - Combines all open ports
-   - Updates port state if it changes
-
-2. `intersection`: Keeps only findings present in all scans
-   - Only includes hosts present in all scans
-   - Only includes ports found in all scans
-   - Good for finding persistent services
-
-3. `latest`: Uses the most recent scan data
-   - Takes the newest data for each host
-   - Completely replaces old data
-   - Best for current state analysis
 
 ## Report Format
 
