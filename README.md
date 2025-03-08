@@ -1,6 +1,6 @@
 # PortScoper
 
-A comprehensive Nmap output analyzer and enumeration helper that parses XML output and generates detailed reports with enumeration commands.
+A comprehensive Nmap output analyzer and enumeration helper that parses XML output and generates detailed reports with enumeration commands. This is a work in progress, and the main part that needs more work is the list of enumeration commands per service in the common services section. 
 
 ## Features
 
