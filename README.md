@@ -1,67 +1,126 @@
 # PortScoper
 
-A comprehensive Nmap output analyzer and enumeration helper that generates Excel reports and enumeration commands. Send an nmap output in the form of an XML into the script, and it outputs an XLSX file with the formatted results for tracking purposes. Additionally, the tool outputs all unique ports discovered in a table, and enumeration commands to continue pentesting. Note: The enumeration command feature is in development.
+A comprehensive Nmap output analyzer and enumeration helper that parses XML output and generates detailed reports with enumeration commands.
 
 ## Features
 
 - Parse Nmap XML output files
-- Generate Excel reports with:
-  - Separate sheets for each host
-  - Port information (number, protocol, state, service, version)
-  - Script outputs
-  - Host details (IP, hostname, OS detection)
-- List unique ports and their services
-- Generate enumeration commands for discovered services
-- Organized output by port number
-- JSON export of enumeration commands
+- Generate organized Excel reports
+- Multiple report organization modes (subnet-based or IP-based)
+- Merge multiple scan results with different strategies
+- Generate targeted enumeration commands
+- Support for extensive service types
+- Comprehensive service enumeration techniques
+- Beautiful console output with rich formatting
 
 ## Installation
 
-1. Clone the repository:
 ```bash
+# Clone the repository
 git clone https://github.com/bmodha/PortScoper.git
 cd PortScoper
-```
 
-2. Install dependencies:
-```bash
+# Install requirements
 pip install -r requirements.txt
 ```
 
 ## Usage
 
-1. Run an Nmap scan with XML output:
+Basic usage:
 ```bash
-nmap -sV -sC -O <target> -oX scan.xml
+python portscoper.py -i scan.xml
 ```
 
-2. Run PortScoper:
+### Multiple Input Files
+
+You can analyze multiple Nmap XML files with different merge strategies:
+
 ```bash
-python portscoper.py scan.xml
+# Analyze multiple scans (union strategy by default)
+python portscoper.py -i scan1.xml scan2.xml scan3.xml
+
+# Use different merge strategies
+python portscoper.py -i scan1.xml scan2.xml --merge-strategy intersection
+python portscoper.py -i scan1.xml scan2.xml --merge-strategy latest
 ```
 
-### Command Line Options
+### Report Organization
 
-```
-usage: portscoper.py [-h] [-o OUTPUT] [-c COMMANDS] input_file
+Choose between two organization modes for the Excel report:
 
-positional arguments:
-  input_file            Input Nmap XML file (generated using -oX flag)
+```bash
+# Subnet-based organization (default)
+python portscoper.py -i scan.xml --organization subnet
 
-optional arguments:
-  -h, --help           show this help message and exit
-  -o OUTPUT, --output  Output Excel file path (default: portscoper_report.xlsx)
-  -c COMMANDS, --commands
-                      Output file path for enumeration commands in JSON format (default: enumeration_commands.json)
+# IP-based organization
+python portscoper.py -i scan.xml --organization ip
 ```
 
-### Example Output
+#### Subnet-based Organization
+- Groups hosts by /24 subnet
+- One sheet per subnet
+- Summary sheet with subnet statistics
+- Better for large networks
+- More compact for many hosts
 
-The tool generates:
-1. An Excel report with detailed host and port information
-2. A summary of unique ports and their services
-3. Enumeration commands for each discovered service
-4. A JSON file containing all enumeration commands
+#### IP-based Organization
+- One sheet per IP address
+- Detailed view of each host
+- Summary sheet with host statistics
+- Better for individual host analysis
+- More granular information
+
+### Custom Output Files
+
+Specify custom output file paths:
+```bash
+python portscoper.py -i scan.xml -o custom_report.xlsx -c custom_commands.json
+```
+
+## Merge Strategies
+
+When analyzing multiple scan files, choose from three merge strategies:
+
+1. `union` (default): Combines all findings from all scans
+   - Includes all hosts from all scans
+   - Combines all open ports
+   - Updates port state if it changes
+
+2. `intersection`: Keeps only findings present in all scans
+   - Only includes hosts present in all scans
+   - Only includes ports found in all scans
+   - Good for finding persistent services
+
+3. `latest`: Uses the most recent scan data
+   - Takes the newest data for each host
+   - Completely replaces old data
+   - Best for current state analysis
+
+## Report Format
+
+### Summary Sheet
+- Network/Host overview
+- Statistics and key findings
+- Hyperlinks to detailed sheets
+- Critical service highlighting
+
+### Detailed Sheets (Subnet or IP based)
+- Port information
+- Service details
+- Version detection
+- OS detection results
+- NSE script outputs
+- Comprehensive notes
+
+## Enumeration Commands
+
+Generates targeted enumeration commands for:
+- Web Services (HTTP/HTTPS)
+- Network Services (SSH, FTP, Telnet)
+- Windows Services (SMB, RDP)
+- Databases (MySQL, MSSQL, PostgreSQL)
+- Mail Services (SMTP, POP3, IMAP)
+- And many more...
 
 ## Requirements
 
@@ -69,6 +128,17 @@ The tool generates:
 - openpyxl
 - rich
 
+## Input Format
+
+The tool expects Nmap XML output. Generate it using:
+```bash
+nmap -sV -sC -O <target> -oX scan.xml
+```
+
 ## License
 
 MIT License
+
+## Contributing
+
+Contributions are welcome! Please feel free to submit pull requests.
