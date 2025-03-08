@@ -24,6 +24,13 @@ cd PortScoper
 pip install -r requirements.txt
 ```
 
+## Input Format
+
+The tool expects Nmap XML output. Generate it using:
+```bash
+nmap -sV -sC -O <target> -oX scan.xml
+```
+
 ## Usage
 
 Basic usage:
@@ -126,13 +133,6 @@ Generates targeted enumeration commands for:
 - Python 3.6+
 - openpyxl
 - rich
-
-## Input Format
-
-The tool expects Nmap XML output. Generate it using:
-```bash
-nmap -sV -sC -O <target> -oX scan.xml
-```
 
 ## License
 
