@@ -36,11 +36,26 @@ class Host:
     status: str
 
 class PortScoper:
+    VERSION = "1.0.0"  # Add version constant at class level
+    
     def __init__(self):
         self.console = Console()
         self.hosts: List[Host] = []
         self.unique_ports: DefaultDict[int, Set[str]] = defaultdict(set)
         self.enumeration_commands: Dict[str, List[str]] = {}
+
+    def display_banner(self) -> None:
+        """Display the tool's banner."""
+        banner = f"""[bold cyan]
+ ██████╗  ██████╗ ██████╗ ████████╗███████╗ ██████╗ ██████╗ ██████╗ ███████╗██████╗ 
+ ██╔══██╗██╔═══██╗██╔══██╗╚══██╔══╝██╔════╝██╔════╝██╔═══██╗██╔══██╗██╔════╝██╔══██╗
+ ██████╔╝██║   ██║██████╔╝   ██║   ███████╗██║     ██║   ██║██████╔╝█████╗  ██████╔╝
+ ██╔═══╝ ██║   ██║██╔══██╗   ██║   ╚════██║██║     ██║   ██║██╔═══╝ ██╔══╝  ██╔══██╗
+ ██║     ╚██████╔╝██║  ██║   ██║   ███████║╚██████╗╚██████╔╝██║     ███████╗██║  ██║
+ ╚═╝      ╚═════╝ ╚═╝  ╚═╝   ╚═╝   ╚══════╝ ╚═════╝ ╚═════╝ ╚═╝     ╚══════╝╚═╝  ╚═╝[/bold cyan]"""
+        
+        self.console.print(banner)
+        self.console.print(f"\n[dim]Version {self.VERSION} - https://github.com/bmodha/PortScoper[/dim]\n")
 
     def parse_nmap_xml(self, input_file: str) -> None:
         """Parse Nmap XML output file."""
@@ -123,26 +138,45 @@ class PortScoper:
 
     def print_enumeration_commands(self) -> None:
         """Print enumeration commands for each port."""
-        # Convert port numbers from strings to integers for proper sorting
-        port_numbers = [int(port) for port in self.enumeration_commands.keys()]
-        port_numbers.sort()  # Sort in ascending order
+        # Create a mapping of ports to hosts that have that port open
+        port_to_hosts: DefaultDict[int, List[tuple[str, str]]] = defaultdict(list)
+        for host in self.hosts:
+            for port in host.ports:
+                if port.state == "open":
+                    # Store tuple of (ip, service) for each host
+                    port_to_hosts[port.number].append((host.ip, port.service))
+
+        # Sort ports numerically
+        port_numbers = sorted(port_to_hosts.keys())
 
         # Print header
         self.console.print("\n[bold yellow]Enumeration Commands by Port Number:[/bold yellow]")
         
         for port in port_numbers:
-            port_str = str(port)
-            commands = self.enumeration_commands[port_str]
+            # Get all hosts and their services for this port
+            hosts_and_services = port_to_hosts[port]
             
-            # Get the services for this port from unique_ports
-            services = ", ".join(sorted(self.unique_ports[port]))
+            # Print port header with all services found on this port
+            unique_services = sorted(set(service for _, service in hosts_and_services))
+            services_str = ", ".join(unique_services)
+            self.console.print(f"\n[bold cyan]Port {port} - {services_str}[/bold cyan]")
             
-            # Print port header with services
-            self.console.print(f"\n[bold cyan]Port {port} - {services}[/bold cyan]")
+            # Get the appropriate commands for each service
+            commands = set()  # Use set to avoid duplicate commands
+            for _, service in hosts_and_services:
+                service_lower = service.lower()
+                if service_lower in self.common_commands:
+                    commands.update(self.common_commands[service_lower])
+                else:
+                    commands.update(self.common_commands["default"])
             
-            # Print commands with numbering
-            for i, cmd in enumerate(commands, 1):
-                self.console.print(f"[blue]{i}. {cmd}[/blue]")
+            # Print commands for each host
+            for host_ip, _ in sorted(hosts_and_services):  # Sort by IP
+                self.console.print(f"\n[bold blue]Target: {host_ip}[/bold blue]")
+                # Print each command with the IP and port filled in
+                for i, cmd_template in enumerate(sorted(commands), 1):
+                    cmd = cmd_template.format(target=host_ip, port=port)
+                    self.console.print(f"[blue]{i}. {cmd}[/blue]")
 
     def save_enumeration_commands(self, output_file: str) -> None:
         """Save enumeration commands to a file."""
@@ -159,6 +193,43 @@ class PortScoper:
         with open(output_file, 'w') as f:
             json.dump({"ports": sorted_commands}, f, indent=2)
         self.console.print(f"[green]Saved enumeration commands to: {output_file}[/green]")
+
+    @property
+    def common_commands(self) -> Dict[str, List[str]]:
+        """Define common enumeration commands for different services."""
+        return {
+            "http": [
+                "nmap -sV -p {port} -sC --script=http-enum,http-title,http-headers {target}",
+                "gobuster dir -u http://{target}:{port} -w /usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt",
+                "nikto -h {target} -p {port}"
+            ],
+            "https": [
+                "nmap -sV -p {port} -sC --script=ssl-enum-ciphers,http-enum {target}",
+                "gobuster dir -u https://{target}:{port} -w /usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt -k",
+                "sslscan {target}:{port}"
+            ],
+            "ssh": [
+                "nmap -p {port} -sV -sC --script=ssh-auth-methods,ssh2-enum-algos {target}"
+            ],
+            "smb": [
+                "nmap -p {port} -sV -sC --script=smb-* {target}",
+                "enum4linux -a {target}",
+                "smbclient -L //{target} -N"
+            ],
+            "ftp": [
+                "nmap -p {port} -sV -sC --script=ftp-* {target}",
+                "hydra -L /usr/share/wordlists/user.txt -P /usr/share/wordlists/pass.txt {target} ftp -s {port}"
+            ],
+            "mysql": [
+                "nmap -p {port} -sV -sC --script=mysql-* {target}"
+            ],
+            "mssql": [
+                "nmap -p {port} -sV -sC --script=ms-sql-* {target}"
+            ],
+            "default": [
+                "nmap -sV -p {port} -sC {target}"
+            ]
+        }
 
 class NmapXMLParser:
     def __init__(self, input_file: str):
@@ -330,6 +401,9 @@ Note:
     try:
         # Initialize PortScoper
         scoper = PortScoper()
+        
+        # Display banner
+        scoper.display_banner()
         
         # Parse nmap output
         scoper.console.print("[yellow]Parsing Nmap XML output...[/yellow]")
