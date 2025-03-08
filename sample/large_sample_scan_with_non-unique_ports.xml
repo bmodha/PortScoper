@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE nmaprun>
+<nmaprun scanner="nmap" version="7.94">
+<scaninfo type="syn" protocol="tcp"/>
+
+<!-- Host 1: Web Server -->
+<host>
+    <status state="up"/>
+    <address addr="192.168.1.10" addrtype="ipv4"/>
+    <hostnames><hostname name="webserver1.local" type="PTR"/></hostnames>
+    <ports>
+        <port protocol="tcp" portid="22"><state state="open"/><service name="ssh" product="OpenSSH" version="8.9p1"/></port>
+        <port protocol="tcp" portid="80"><state state="open"/><service name="http" product="Apache httpd" version="2.4.52"/></port>
+        <port protocol="tcp" portid="443"><state state="open"/><service name="https" product="Apache httpd" version="2.4.52"/></port>
+        <port protocol="tcp" portid="3306"><state state="open"/><service name="mysql" product="MySQL" version="8.0.32"/></port>
+    </ports>
+    <os><osmatch name="Ubuntu Linux 22.04" accuracy="98"/></os>
+</host>
+
+<!-- Host 2: Database Server -->
+<host>
+    <status state="up"/>
+    <address addr="192.168.1.20" addrtype="ipv4"/>
+    <hostnames><hostname name="dbserver.local" type="PTR"/></hostnames>
+    <ports>
+        <port protocol="tcp" portid="22"><state state="open"/><service name="ssh" product="OpenSSH" version="8.9p1"/></port>
+        <port protocol="tcp" portid="1433"><state state="open"/><service name="mssql" product="Microsoft SQL Server" version="2019"/></port>
+        <port protocol="tcp" portid="3306"><state state="open"/><service name="mysql" product="MySQL" version="8.0.32"/></port>
+        <port protocol="tcp" portid="5432"><state state="open"/><service name="postgresql" product="PostgreSQL" version="14.7"/></port>
+    </ports>
+    <os><osmatch name="Windows Server 2019" accuracy="95"/></os>
+</host>
+
+<!-- Host 3: File Server -->
+<host>
+    <status state="up"/>
+    <address addr="192.168.1.30" addrtype="ipv4"/>
+    <hostnames><hostname name="fileserver.local" type="PTR"/></hostnames>
+    <ports>
+        <port protocol="tcp" portid="21"><state state="open"/><service name="ftp" product="vsftpd" version="3.0.5"/></port>
+        <port protocol="tcp" portid="22"><state state="open"/><service name="ssh" product="OpenSSH" version="8.9p1"/></port>
+        <port protocol="tcp" portid="139"><state state="open"/><service name="netbios-ssn" product="Samba smbd" version="4.15.2"/></port>
+        <port protocol="tcp" portid="445"><state state="open"/><service name="smb" product="Samba smbd" version="4.15.2"/></port>
+    </ports>
+    <os><osmatch name="Ubuntu Linux 22.04" accuracy="96"/></os>
+</host>
+
+<!-- Host 4: Web Application Server -->
+<host>
+    <status state="up"/>
+    <address addr="192.168.1.40" addrtype="ipv4"/>
+    <hostnames><hostname name="webapp.local" type="PTR"/></hostnames>
+    <ports>
+        <port protocol="tcp" portid="22"><state state="open"/><service name="ssh" product="OpenSSH" version="8.9p1"/></port>
+        <port protocol="tcp" portid="80"><state state="open"/><service name="http" product="Nginx" version="1.22.1"/></port>
+        <port protocol="tcp" portid="443"><state state="open"/><service name="https" product="Nginx" version="1.22.1"/></port>
+        <port protocol="tcp" portid="8080"><state state="open"/><service name="http" product="Apache Tomcat" version="9.0.71"/></port>
+        <port protocol="tcp" portid="8443"><state state="open"/><service name="https" product="Apache Tomcat" version="9.0.71"/></port>
+    </ports>
+    <os><osmatch name="Ubuntu Linux 22.04" accuracy="97"/></os>
+</host>
+
+<!-- Host 5: Development Server -->
+<host>
+    <status state="up"/>
+    <address addr="192.168.1.50" addrtype="ipv4"/>
+    <hostnames><hostname name="devserver.local" type="PTR"/></hostnames>
+    <ports>
+        <port protocol="tcp" portid="22"><state state="open"/><service name="ssh" product="OpenSSH" version="8.9p1"/></port>
+        <port protocol="tcp" portid="80"><state state="open"/><service name="http" product="Apache httpd" version="2.4.52"/></port>
+        <port protocol="tcp" portid="3000"><state state="open"/><service name="http" product="Node.js" version="16.0"/></port>
+        <port protocol="tcp" portid="5000"><state state="open"/><service name="http" product="Flask" version="2.0"/></port>
+        <port protocol="tcp" portid="8000"><state state="open"/><service name="http" product="Django" version="4.0"/></port>
+    </ports>
+    <os><osmatch name="Ubuntu Linux 22.04" accuracy="95"/></os>
+</host>
+
+<!-- Host 6: Windows Server -->
+<host>
+    <status state="up"/>
+    <address addr="192.168.1.60" addrtype="ipv4"/>
+    <hostnames><hostname name="winserver.local" type="PTR"/></hostnames>
+    <ports>
+        <port protocol="tcp" portid="80"><state state="open"/><service name="http" product="Microsoft IIS" version="10.0"/></port>
+        <port protocol="tcp" portid="443"><state state="open"/><service name="https" product="Microsoft IIS" version="10.0"/></port>
+        <port protocol="tcp" portid="445"><state state="open"/><service name="smb" product="Microsoft Windows SMB" version=""/></port>
+        <port protocol="tcp" portid="3389"><state state="open"/><service name="rdp" product="Microsoft Terminal Service" version=""/></port>
+    </ports>
+    <os><osmatch name="Windows Server 2019" accuracy="96"/></os>
+</host>
+
+<!-- Host 7: Mail Server -->
+<host>
+    <status state="up"/>
+    <address addr="192.168.1.70" addrtype="ipv4"/>
+    <hostnames><hostname name="mailserver.local" type="PTR"/></hostnames>
+    <ports>
+        <port protocol="tcp" portid="22"><state state="open"/><service name="ssh" product="OpenSSH" version="8.9p1"/></port>
+        <port protocol="tcp" portid="25"><state state="open"/><service name="smtp" product="Postfix" version="3.6.4"/></port>
+        <port protocol="tcp" portid="110"><state state="open"/><service name="pop3" product="Dovecot" version="2.3.16"/></port>
+        <port protocol="tcp" portid="143"><state state="open"/><service name="imap" product="Dovecot" version="2.3.16"/></port>
+        <port protocol="tcp" portid="587"><state state="open"/><service name="smtp" product="Postfix" version="3.6.4"/></port>
+    </ports>
+    <os><osmatch name="Ubuntu Linux 22.04" accuracy="94"/></os>
+</host>
+
+<!-- Host 8: Monitoring Server -->
+<host>
+    <status state="up"/>
+    <address addr="192.168.1.80" addrtype="ipv4"/>
+    <hostnames><hostname name="monitor.local" type="PTR"/></hostnames>
+    <ports>
+        <port protocol="tcp" portid="22"><state state="open"/><service name="ssh" product="OpenSSH" version="8.9p1"/></port>
+        <port protocol="tcp" portid="80"><state state="open"/><service name="http" product="Nginx" version="1.22.1"/></port>
+        <port protocol="tcp" portid="3000"><state state="open"/><service name="http" product="Grafana" version="9.3.2"/></port>
+        <port protocol="tcp" portid="9090"><state state="open"/><service name="http" product="Prometheus" version="2.42.0"/></port>
+        <port protocol="tcp" portid="9100"><state state="open"/><service name="http" product="Node Exporter" version="1.5.0"/></port>
+    </ports>
+    <os><osmatch name="Ubuntu Linux 22.04" accuracy="93"/></os>
+</host>
+
+<!-- Host 9: Docker Host -->
+<host>
+    <status state="up"/>
+    <address addr="192.168.1.90" addrtype="ipv4"/>
+    <hostnames><hostname name="docker.local" type="PTR"/></hostnames>
+    <ports>
+        <port protocol="tcp" portid="22"><state state="open"/><service name="ssh" product="OpenSSH" version="8.9p1"/></port>
+        <port protocol="tcp" portid="80"><state state="open"/><service name="http" product="Nginx" version="1.22.1"/></port>
+        <port protocol="tcp" portid="2375"><state state="open"/><service name="docker" product="Docker" version="23.0"/></port>
+        <port protocol="tcp" portid="2376"><state state="open"/><service name="docker-s" product="Docker" version="23.0"/></port>
+        <port protocol="tcp" portid="5000"><state state="open"/><service name="docker-registry" product="Docker Registry" version="2.8"/></port>
+    </ports>
+    <os><osmatch name="Ubuntu Linux 22.04" accuracy="92"/></os>
+</host>
+
+<!-- Host 10: Legacy Application Server -->
+<host>
+    <status state="up"/>
+    <address addr="192.168.1.100" addrtype="ipv4"/>
+    <hostnames><hostname name="legacy.local" type="PTR"/></hostnames>
+    <ports>
+        <port protocol="tcp" portid="21"><state state="open"/><service name="ftp" product="vsftpd" version="3.0.5"/></port>
+        <port protocol="tcp" portid="22"><state state="open"/><service name="ssh" product="OpenSSH" version="8.9p1"/></port>
+        <port protocol="tcp" portid="80"><state state="open"/><service name="http" product="Apache httpd" version="2.4.52"/></port>
+        <port protocol="tcp" portid="1521"><state state="open"/><service name="oracle" product="Oracle Database" version="19c"/></port>
+        <port protocol="tcp" portid="3306"><state state="open"/><service name="mysql" product="MySQL" version="5.7.40"/></port>
+    </ports>
+    <os><osmatch name="Ubuntu Linux 20.04" accuracy="91"/></os>
+</host>
+
+</nmaprun>
