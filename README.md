@@ -1,6 +1,6 @@
 # PortScoper
 
-A comprehensive Nmap output analyzer and enumeration helper that generates Excel reports and enumeration commands. Send an nmap output in the form of an XML into the script, and it outputs an XLSX file with the formatted results for tracking purposes. Additionally, the tool outputs all unique ports discovered in a table, and enumeration commands to continue pentesting.
+A comprehensive Nmap output analyzer and enumeration helper that generates Excel reports and enumeration commands. Send an nmap output in the form of an XML into the script, and it outputs an XLSX file with the formatted results for tracking purposes. Additionally, the tool outputs all unique ports discovered in a table, and enumeration commands to continue pentesting. Note: The enumeration command feature is in development.
 
 ## Features
 
